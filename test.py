@@ -9,6 +9,7 @@ database = "sample"
 path = cwd+"/"+database+".db"
 
 ispath = os.path.exists(cwd+"/"+database+".db")
+globalans = [] 
 
 if not ispath:
     conn = sqlite3.connect('sample.db')
@@ -27,16 +28,19 @@ if not ispath:
 
     c.execute("SELECT * FROM users") 
     ans = c.fetchall() 
-    print(ans)
+    globalans = ans
 else:
     print('file already exists, delete before re-running')
 
 app = Flask(__name__)
 
+print(globalans)
+
 @app.route('/')
 @app.route('/index')
 def index():
-    render_template('index.html', users=)
+    return render_template('index.html', 
+        users=[x for x in globalans])
 
 if __name__ == "__main__":
     app.run()
